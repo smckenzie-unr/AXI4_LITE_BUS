@@ -1,0 +1,63 @@
+    /*read_state_proc : process(ACLK) is
+    begin
+        if rising_edge(ACLK) then
+            if ARESETN = '0' then
+                read_state <= IDLE;
+            else
+                case read_state is
+                    when ADDRESS_LATCH =>
+                        read_state <= DATA_OUTPUT;
+                    when DATA_OUTPUT =>
+                        if S_AXI_RREADY = '1' then
+                            if S_AXI_ARVALID = '1' and axi_rvalid = '0' then
+                                read_state <= ADDRESS_LATCH;
+                            else
+                                read_state <= IDLE;
+                            end if;
+                        end if;
+                    when others =>
+                        if S_AXI_ARVALID = '1' and axi_rvalid = '0' then
+                            read_state <= ADDRESS_LATCH;
+                        end if;
+                end case;            
+            end if;
+        end if;
+    end process read_state_proc;
+    
+    axi_arready_prox : process(read_state) is 
+    begin
+        if read_state = IDLE then
+            axi_arready <= '0';
+        elsif read_state = ADDRESS_LATCH then
+            axi_arready <= '1';
+        elsif read_state = DATA_OUTPUT then
+            axi_arready <= '0';
+        end if;
+    end process;*/
+            
+
+    /*process(ACLK) is
+    begin
+        if rising_edge(ACLK) then
+            if ARESETN = '0' then
+                read_address_reg <= NUM_REGISTERS;
+                axi_arready <= '0';
+            elsif S_AXI_ARVALID = '1' and axi_arready = '0' and (axi_rvalid = '0' or S_AXI_RREADY = '1') then
+                read_address_reg <= ADDRESS_INT(S_AXI_ARADDR);
+                axi_arready <= '1';
+            else
+                read_address_reg <= NUM_REGISTERS;
+                axi_arready <= '0';
+            end if;
+        end if;
+    end process;
+
+    process(read_address_reg) is
+    begin
+        if read_address_reg < NUM_REGISTERS then
+            axi_rvalid <= '1';
+            axi_rdata <= data_registers(read_address_reg);
+        else
+            axi_rvalid <= '0';
+        end if;
+    end process;*/
