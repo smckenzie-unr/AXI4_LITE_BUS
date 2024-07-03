@@ -52,6 +52,7 @@ architecture LOGIC of AXI4_LITE_SLAVE is
     
     type register_array is array (C_NUM_REGISTERS downto 0) of std_logic_vector(C_AXI_DATA_WIDTH-1 downto 0);
     type read_state_machine is (IDLE, READ_ADDR_LATCH, READ_DATA_OUT);
+    type write_state_machine is (NOOP, ADDRESS_LATCH, DATA_LATCH, RESPONSE_OUT);
     
     pure function SLAVE_REG_INIT(array_length : positive) return register_array is
         variable ret_registers : register_array := (others => (others => '0'));
@@ -64,6 +65,7 @@ architecture LOGIC of AXI4_LITE_SLAVE is
     
     signal registers : register_array := SLAVE_REG_INIT(C_NUM_REGISTERS);
     signal read_state : read_state_machine := IDLE;
+    signal write_state : write_state_machine := NOOP;
     
     signal axi_arready : std_logic := '0';
     signal axi_rvalid : std_logic := '0';
@@ -118,6 +120,52 @@ begin
                             read_state <= READ_ADDR_LATCH;
                         else
                             read_state <= IDLE;
+                        end if;
+                end case;
+            end if;
+        end if;
+    end process;
+    
+    WRITE_STATE_PROX : process(ACLK) is
+        variable address : natural := 0;
+    begin
+        if rising_edge(ACLK) then
+            if ARESETN = '0' then
+                write_state <= NOOP;
+                axi_awready <= '0';
+                axi_wready <= '0';
+                axi_bvalid <= '0';
+                axi_bresp <= AXI_RESPONSE_SLVERR;
+            else
+                case write_state is
+                    when ADDRESS_LATCH =>
+                        axi_awready <= '1';
+                        if S_AXI_WVALID = '1' then
+                            axi_awready <= '0';
+                            write_state <= DATA_LATCH;
+                        else
+                            address := to_integer(unsigned(S_AXI_AWADDR(C_AXI_ADDRESS_WIDTH - 1 downto ADDR_LSB)));
+                            write_state <= ADDRESS_LATCH;
+                        end if;
+                    when DATA_LATCH =>
+                        axi_wready <= '1';
+                        registers(address) <= S_AXI_WDATA;
+                        write_state <= RESPONSE_OUT;
+                    when RESPONSE_OUT =>
+                        axi_wready <= '0';
+                        axi_bvalid <= '1';
+                        axi_bresp <= AXI_RESPONSE_OKAY;
+                        if S_AXI_BREADY = '1' then
+                            write_state <= NOOP;
+                        else
+                            write_state <= RESPONSE_OUT;
+                        end if;
+                    when others => --NOOP
+                        axi_bvalid <= '0';
+                        if S_AXI_AWVALID = '1' then
+                            write_state <= ADDRESS_LATCH;
+                        else
+                            write_state <= NOOP;
                         end if;
                 end case;
             end if;
