@@ -7,7 +7,7 @@ entity AXI4_LITE_SLAVE is
     generic(C_AXI_ADDRESS_WIDTH : positive range 32 to 128 := 32;
             C_AXI_DATA_WIDTH : positive range 32 to 128 := 32;
             C_AXI_STRB_WIDTH : positive range 4 to 8 := 4;
-            C_NUM_REGISTERS : positive range 1 to 4096 := 4);
+            C_NUM_REGISTERS : positive range 1 to 4096 := 32);
     port(
          -- Clock and Reset
          ACLK : in std_logic;
@@ -54,16 +54,16 @@ architecture LOGIC of AXI4_LITE_SLAVE is
     type read_state_machine is (IDLE, READ_ADDR_LATCH, READ_DATA_OUT);
     type write_state_machine is (NOOP, ADDRESS_LATCH, DATA_LATCH, RESPONSE_OUT);
     
-    pure function SLAVE_REG_INIT(array_length : positive) return register_array is
-        variable ret_registers : register_array := (others => (others => '0'));
-    begin
-        for i in 0 to array_length-1 loop
-            ret_registers(i) := std_logic_vector(to_unsigned(array_length-1-i, ret_registers(i)'length));
-        end loop;
-        return ret_registers;
-    end function;
+    --pure function SLAVE_REG_INIT(array_length : positive) return register_array is
+    --    variable ret_registers : register_array := (others => (others => '0'));
+    --begin
+    --    for i in 0 to array_length-1 loop
+    --        ret_registers(i) := std_logic_vector(to_unsigned(array_length-1-i, ret_registers(i)'length));
+    --    end loop;
+    --    return ret_registers;
+    --end function;
     
-    signal registers : register_array := SLAVE_REG_INIT(C_NUM_REGISTERS);
+    signal registers : register_array := (others => (others => '0')); --SLAVE_REG_INIT(C_NUM_REGISTERS);
     signal read_state : read_state_machine := IDLE;
     signal write_state : write_state_machine := NOOP;
     
@@ -128,6 +128,7 @@ begin
     
     WRITE_STATE_PROX : process(ACLK) is
         variable address : natural := 0;
+        variable count : natural := 0;
     begin
         if rising_edge(ACLK) then
             if ARESETN = '0' then
@@ -140,16 +141,22 @@ begin
                 case write_state is
                     when ADDRESS_LATCH =>
                         axi_awready <= '1';
-                        if S_AXI_WVALID = '1' then
+                        if count = 1 then
                             axi_awready <= '0';
                             write_state <= DATA_LATCH;
+                            count := 0;
                         else
                             address := to_integer(unsigned(S_AXI_AWADDR(C_AXI_ADDRESS_WIDTH - 1 downto ADDR_LSB)));
-                            write_state <= ADDRESS_LATCH;
+                            count := count + 1;
                         end if;
                     when DATA_LATCH =>
                         axi_wready <= '1';
-                        registers(address) <= S_AXI_WDATA;
+                        if S_AXI_WVALID = '1' then
+                            registers(address) <= S_AXI_WDATA;
+                            write_state <= RESPONSE_OUT;
+                        else
+                            write_state <= DATA_LATCH;
+                        end if;
                         write_state <= RESPONSE_OUT;
                     when RESPONSE_OUT =>
                         axi_wready <= '0';
@@ -162,6 +169,7 @@ begin
                         end if;
                     when others => --NOOP
                         axi_bvalid <= '0';
+                        axi_bresp <= AXI_RESPONSE_SLVERR;
                         if S_AXI_AWVALID = '1' then
                             write_state <= ADDRESS_LATCH;
                         else

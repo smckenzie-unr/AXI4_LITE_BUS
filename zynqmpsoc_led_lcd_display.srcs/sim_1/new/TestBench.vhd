@@ -58,14 +58,18 @@ architecture Behavioral of TestBench is
     signal clock_en : std_logic := '1';
     signal reset : std_logic := '1';
 
-    signal awaddr : std_logic_vector(31 downto 0) := (others => 'Z');
-    signal awvalid : std_logic := 'Z';
-    signal awready : std_logic := 'Z';
+    signal awaddr : std_logic_vector(31 downto 0) := (others => '0');
+    signal awvalid : std_logic := '0';
+    signal awready : std_logic := '0';
 
-    signal wdata : std_logic_vector(31 downto 0) := (others => 'Z');
-    signal wstrb : std_logic_vector(3 downto 0) := (others => 'Z');
-    signal wvalid : std_logic := 'Z';
-    signal wready : std_logic := 'Z';
+    signal wdata : std_logic_vector(31 downto 0) := (others => '0');
+    signal wstrb : std_logic_vector(3 downto 0) := (others => '0');
+    signal wvalid : std_logic := '0';
+    signal wready : std_logic := '0';
+    
+    signal bresp : std_logic_vector(1 downto 0) := (others => '0');
+    signal bvalid : std_logic := '0';
+    signal bready : std_logic := '0';
 
     signal araddr : std_logic_vector(31 downto 0) := (others => '0');
     signal arvalid : std_logic := '0';
@@ -76,39 +80,60 @@ architecture Behavioral of TestBench is
     signal rready : std_logic := '0';
     signal rresp : std_logic_vector(1 downto 0) := (others => '0');
 
-    signal bresp : std_logic_vector(1 downto 0) := (others => 'Z');
-    signal bvalid : std_logic := 'Z';
-    signal bready : std_logic := 'Z';
-
 begin
     clock_generator(CLK => clock, FREQ => clk_freq, RUN => clock_en);
-    UUT : entity work.AXI4_LITE_BUS port map(ACLK => clock,
-                                             ARESETN => reset,
+    UUT : entity work.AXI4_LITE_SLAVE port map(ACLK => clock,
+                                               ARESETN => reset,
 
-                                             S_AXI_AWADDR => awaddr,
-                                             S_AXI_AWVALID => awvalid,
-                                             S_AXI_AWREADY => awready,
+                                               S_AXI_AWADDR => awaddr,
+                                               S_AXI_AWVALID => awvalid,
+                                               S_AXI_AWREADY => awready,
 
-                                             S_AXI_WDATA => wdata,
-                                             S_AXI_WSTRB => wstrb,
-                                             S_AXI_WVALID => wvalid,
-                                             S_AXI_WREADY => wready,
+                                               S_AXI_WDATA => wdata,
+                                               S_AXI_WSTRB => wstrb,
+                                               S_AXI_WVALID => wvalid,
+                                               S_AXI_WREADY => wready,
 
 
-                                             S_AXI_ARADDR => araddr,
-                                             S_AXI_ARVALID => arvalid,
-                                             S_AXI_ARREADY => arready,
+                                               S_AXI_ARADDR => araddr,
+                                               S_AXI_ARVALID => arvalid,
+                                               S_AXI_ARREADY => arready,
 
-                                             S_AXI_RDATA => rdata,
-                                             S_AXI_RVALID => rvalid,
-                                             S_AXI_RREADY => rready,
-                                             S_AXI_RRESP => rresp,
+                                               S_AXI_RDATA => rdata,
+                                               S_AXI_RVALID => rvalid,
+                                               S_AXI_RREADY => rready,
+                                               S_AXI_RRESP => rresp,
 
-                                             S_AXI_BRESP => bresp,
-                                             S_AXI_BVALID => bvalid,
-                                             S_AXI_BREADY => bready
-                                             ); 
-                                             
+                                               S_AXI_BRESP => bresp,
+                                               S_AXI_BVALID => bvalid,
+                                               S_AXI_BREADY => bready
+                                               ); 
+    
+    awvalid <= '1' after 0.880 us,
+               '0' after 0.900 us,
+               '1' after 0.940 us,
+               '0' after 0.960 us;
+    awaddr <= X"00000014" after 0.880 us,
+              X"00000000" after 0.900 us,
+              X"00000004" after 0.940 us,
+              X"00000000" after 0.960 us;
+    wvalid <= '1' after 0.900 us,
+              '0' after 0.920 us,
+              '1' after 0.960 us,
+              '0' after 0.980 us;
+    wdata <= X"DEADBEEF" after 0.900 us,
+             X"00000000" after 0.920 us,
+             X"BA5EBA11" after 0.960 us,
+             X"00000000" after 0.980 us;
+    wstrb <= B"1111" after 0.900 us, 
+             B"0000" after 0.920 us,
+             B"1111" after 0.960 us, 
+             B"0000" after 0.980 us; 
+    bready <= '1' after 0.930 us,
+              '0' after 0.940 us, 
+              '1' after 0.990 us,
+              '0' after 1.000 us;          
+                                                        
     arvalid <= '1' after 1.010 us,
                '0' after 1.030 us,
                '1' after 1.050 us,

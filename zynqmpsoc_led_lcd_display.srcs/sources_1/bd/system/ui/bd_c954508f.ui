@@ -1,26 +1,26 @@
 {
    "ActiveEmotionalView":"Default View",
    "Default View_ScaleFactor":"1.0",
-   "Default View_TopLeft":"-966,-566",
+   "Default View_TopLeft":"-951,-566",
    "ExpandedHierarchyInLayout":"",
-   "PinnedBlocks":"/ps8_0_axi_periph|/zynq_ultra_ps_e_0|/AXI4_LITE_BUS_0|/rst_ps8_0_96M|",
+   "PinnedBlocks":"/ps8_0_axi_periph|/zynq_ultra_ps_e_0|/rst_ps8_0_96M|",
    "guistr":"# # String gsaved with Nlview 7.5.8 2022-09-21 7111 VDI=41 GEI=38 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 340 -y 110 -defaultsOSRD
-preplace inst ps8_0_axi_periph -pg 1 -lvl 2 -x 820 -y 170 -defaultsOSRD
+preplace inst ps8_0_axi_periph -pg 1 -lvl 2 -x 830 -y 170 -defaultsOSRD
 preplace inst rst_ps8_0_96M -pg 1 -lvl 1 -x 340 -y 290 -defaultsOSRD
-preplace inst AXI4_LITE_BUS_0 -pg 1 -lvl 3 -x 1080 -y 190 -defaultsOSRD
-preplace netloc rst_ps8_0_96M_peripheral_aresetn 1 1 2 670 10 980
-preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 3 20 10 660 20 970
+preplace inst AXI4_LITE_SLAVE_0 -pg 1 -lvl 3 -x 1100 -y 190 -defaultsOSRD
+preplace netloc rst_ps8_0_96M_peripheral_aresetn 1 1 2 680 10 990
+preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 3 20 10 670 20 980
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 0 2 30 20 650
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_LPD 1 1 1 N 80
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM1_FPD 1 1 1 N 100
 preplace netloc ps8_0_axi_periph_M00_AXI 1 2 1 N 170
-levelinfo -pg 1 0 340 820 1080 1180
-pagesize -pg 1 -db -bbox -sgen 0 0 1180 390
+levelinfo -pg 1 0 340 830 1100 1210
+pagesize -pg 1 -db -bbox -sgen 0 -10 1400 610
 "
 }
 {
-   "da_axi4_cnt":"6",
+   "da_axi4_cnt":"7",
    "da_zynq_ultra_ps_e_cnt":"1"
 }
