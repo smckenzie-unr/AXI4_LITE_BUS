@@ -25,7 +25,7 @@
         "m00_couplers": {}
       },
       "rst_ps8_0_96M": "",
-      "AXI4_LITE_BUS_0": ""
+      "AXI4_LITE_SLAVE_0": ""
     },
     "components": {
       "zynq_ultra_ps_e_0": {
@@ -1480,20 +1480,15 @@
         "xci_path": "ip/system_rst_ps8_0_96M_0/system_rst_ps8_0_96M_0.xci",
         "inst_hier_path": "rst_ps8_0_96M"
       },
-      "AXI4_LITE_BUS_0": {
-        "vlnv": "xilinx.com:module_ref:AXI4_LITE_BUS:1.0",
+      "AXI4_LITE_SLAVE_0": {
+        "vlnv": "xilinx.com:module_ref:AXI4_LITE_SLAVE:1.0",
         "ip_revision": "1",
-        "xci_name": "system_AXI4_LITE_BUS_0_1",
-        "xci_path": "ip/system_AXI4_LITE_BUS_0_1/system_AXI4_LITE_BUS_0_1.xci",
-        "inst_hier_path": "AXI4_LITE_BUS_0",
-        "parameters": {
-          "NUM_REGISTERS": {
-            "value": "32"
-          }
-        },
+        "xci_name": "system_AXI4_LITE_SLAVE_0_0",
+        "xci_path": "ip/system_AXI4_LITE_SLAVE_0_0/system_AXI4_LITE_SLAVE_0_0.xci",
+        "inst_hier_path": "AXI4_LITE_SLAVE_0",
         "reference_info": {
           "ref_type": "hdl",
-          "ref_name": "AXI4_LITE_BUS",
+          "ref_name": "AXI4_LITE_SLAVE",
           "boundary_crc": "0x0"
         },
         "interface_ports": {
@@ -1730,7 +1725,7 @@
       "ps8_0_axi_periph_M00_AXI": {
         "interface_ports": [
           "ps8_0_axi_periph/M00_AXI",
-          "AXI4_LITE_BUS_0/S_AXI"
+          "AXI4_LITE_SLAVE_0/S_AXI"
         ]
       },
       "zynq_ultra_ps_e_0_M_AXI_HPM0_LPD": {
@@ -1754,7 +1749,7 @@
           "ps8_0_axi_periph/M00_ARESETN",
           "ps8_0_axi_periph/ARESETN",
           "ps8_0_axi_periph/S01_ARESETN",
-          "AXI4_LITE_BUS_0/ARESETN"
+          "AXI4_LITE_SLAVE_0/ARESETN"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {
@@ -1767,7 +1762,7 @@
           "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk",
           "zynq_ultra_ps_e_0/maxihpm1_fpd_aclk",
           "ps8_0_axi_periph/S01_ACLK",
-          "AXI4_LITE_BUS_0/ACLK"
+          "AXI4_LITE_SLAVE_0/ACLK"
         ]
       },
       "zynq_ultra_ps_e_0_pl_resetn0": {
@@ -1782,10 +1777,10 @@
         "address_spaces": {
           "Data": {
             "segments": {
-              "SEG_AXI4_LITE_BUS_0_reg0": {
-                "address_block": "/AXI4_LITE_BUS_0/S_AXI/reg0",
-                "offset": "0x0400000000",
-                "range": "4G"
+              "SEG_AXI4_LITE_SLAVE_0_reg0": {
+                "address_block": "/AXI4_LITE_SLAVE_0/S_AXI/reg0",
+                "offset": "0x00A0000000",
+                "range": "128"
               }
             }
           }

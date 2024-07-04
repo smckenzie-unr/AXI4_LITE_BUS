@@ -7,7 +7,7 @@ entity AXI4_LITE_SLAVE is
     generic(C_AXI_ADDRESS_WIDTH : positive range 32 to 128 := 32;
             C_AXI_DATA_WIDTH : positive range 32 to 128 := 32;
             C_AXI_STRB_WIDTH : positive range 4 to 8 := 4;
-            C_NUM_REGISTERS : positive range 1 to 4096 := 4);
+            C_NUM_REGISTERS : positive range 1 to 4096 := 32);
     port(
          -- Clock and Reset
          ACLK : in std_logic;
@@ -99,7 +99,7 @@ begin
                 case read_state is
                     when READ_ADDR_LATCH =>
                         axi_arready <= '1';
-                        address := to_integer(unsigned(S_AXI_ARADDR(C_AXI_ADDRESS_WIDTH - 1 downto ADDR_LSB)));
+                        address := to_integer(unsigned(S_AXI_ARADDR(C_AXI_ADDRESS_WIDTH-1 downto ADDR_LSB)));
                         read_state <= READ_DATA_OUT;
                     when READ_DATA_OUT =>
                         axi_arready <= '0';

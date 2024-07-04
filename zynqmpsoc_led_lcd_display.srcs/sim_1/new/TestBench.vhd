@@ -82,32 +82,32 @@ architecture Behavioral of TestBench is
 
 begin
     clock_generator(CLK => clock, FREQ => clk_freq, RUN => clock_en);
-    UUT : entity work.AXI4_LITE_BUS port map(ACLK => clock,
-                                             ARESETN => reset,
+    UUT : entity work.AXI4_LITE_SLAVE port map(ACLK => clock,
+                                               ARESETN => reset,
 
-                                             S_AXI_AWADDR => awaddr,
-                                             S_AXI_AWVALID => awvalid,
-                                             S_AXI_AWREADY => awready,
+                                               S_AXI_AWADDR => awaddr,
+                                               S_AXI_AWVALID => awvalid,
+                                               S_AXI_AWREADY => awready,
 
-                                             S_AXI_WDATA => wdata,
-                                             S_AXI_WSTRB => wstrb,
-                                             S_AXI_WVALID => wvalid,
-                                             S_AXI_WREADY => wready,
+                                               S_AXI_WDATA => wdata,
+                                               S_AXI_WSTRB => wstrb,
+                                               S_AXI_WVALID => wvalid,
+                                               S_AXI_WREADY => wready,
 
 
-                                             S_AXI_ARADDR => araddr,
-                                             S_AXI_ARVALID => arvalid,
-                                             S_AXI_ARREADY => arready,
+                                               S_AXI_ARADDR => araddr,
+                                               S_AXI_ARVALID => arvalid,
+                                               S_AXI_ARREADY => arready,
 
-                                             S_AXI_RDATA => rdata,
-                                             S_AXI_RVALID => rvalid,
-                                             S_AXI_RREADY => rready,
-                                             S_AXI_RRESP => rresp,
+                                               S_AXI_RDATA => rdata,
+                                               S_AXI_RVALID => rvalid,
+                                               S_AXI_RREADY => rready,
+                                               S_AXI_RRESP => rresp,
 
-                                             S_AXI_BRESP => bresp,
-                                             S_AXI_BVALID => bvalid,
-                                             S_AXI_BREADY => bready
-                                             ); 
+                                               S_AXI_BRESP => bresp,
+                                               S_AXI_BVALID => bvalid,
+                                               S_AXI_BREADY => bready
+                                               ); 
                                              
     arvalid <= '1' after 1.010 us,
                '0' after 1.030 us,
