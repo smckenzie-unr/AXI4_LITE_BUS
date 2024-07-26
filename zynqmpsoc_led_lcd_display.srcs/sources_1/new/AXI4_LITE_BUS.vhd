@@ -126,9 +126,8 @@ begin
         end if;
     end process;
     
-    WRITE_STATE_PROX : process(ACLK) is
+    WRITE_STATE_PROC : process(ACLK) is
         variable address : natural := 0;
-        --variable count : natural := 0;
     begin
         if rising_edge(ACLK) then
             if ARESETN = '0' then
