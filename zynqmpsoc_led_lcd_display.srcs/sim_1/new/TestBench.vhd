@@ -119,7 +119,7 @@ begin
               X"00000000" after 0.960 us;
     wvalid <= '1' after 0.900 us,
               '0' after 0.920 us,
-              '1' after 0.960 us,
+              '1' after 0.960000 us,
               '0' after 0.980 us;
     wdata <= X"DEADBEEF" after 0.900 us,
              X"00000000" after 0.920 us,
